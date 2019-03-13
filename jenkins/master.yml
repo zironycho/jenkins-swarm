@@ -1,0 +1,27 @@
+version: "3.7"
+volumes:
+  jenkins-master:
+    driver: rexray/ebs
+    name: ${ebs_master}
+  
+networks:
+  jenkins:
+    external: true
+    name: jenkins
+
+services:
+  master:
+    image: jenkins/jenkins:lts
+    volumes:
+      - jenkins-master:/var/jenkins_home
+    environment:
+      - JENKINS_JAVA_OPTIONS="-Duser.timezone=${time_zone}"
+    networks:
+      - jenkins
+    ports:
+      - ${expose_port}:8080
+    deploy:
+      placement:
+        constraints:
+          - node.labels.az == ap-northeast-2c
+          - node.labels.normal == true

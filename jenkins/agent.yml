@@ -1,0 +1,36 @@
+version: "3.7"
+networks:
+  jenkins:
+    external: true
+    name: jenkins
+secrets:
+  jenkins-user:
+    external: true
+  jenkins-pass:
+    external: true
+volumes:
+  workspace:
+    driver: local
+
+services:
+  agent:
+    image: neosapience/jenkins-swarm-agent
+    environment:
+      - USER_NAME_SECRET=/run/secrets/${JENKINS_USER_SECRET:-jenkins-user}
+      - PASSWORD_SECRET=/run/secrets/${JENKINS_PASS_SECRET:-jenkins-pass}
+      - COMMAND_OPTIONS=-master http://master:8080 -labels swarm-deploy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - workspace:/workspace
+    networks:
+      - jenkins
+    secrets:
+      - jenkins-user
+      - source: jenkins-pass
+        mode: 0400
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
