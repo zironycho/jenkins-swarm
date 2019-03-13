@@ -1,4 +1,4 @@
-# Jenkins for Swarm cluster in AWS
+# Install Jenkins for Swarm cluster in AWS
 
 ## configure
 
@@ -15,7 +15,9 @@
   * `docker-compose -f master.yml config > deploy-master.yml`
   * `docker stack deploy -c deploy-master.yml jenkins-master`
 * set ALB about exposed port
-* install jenkins master plugins
+* copy `InitialAdminPassword` from master
+* install default plugins you need
+* install [Swarm plugin](https://wiki.jenkins.io/display/JENKINS/Swarm+Plugin) in master jenkins
 * create account for agents
   * username, password
 * set secrets in swarm cluster
