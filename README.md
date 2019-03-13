@@ -12,7 +12,8 @@
 * create network in swarm cluster
   * `docker network create -d overlay jenkins`
 * run master.yml
-  * `docker stack deploy -c master.yml jenkins-master`
+  * `docker-compose -f master.yml config > deploy-master.yml`
+  * `docker stack deploy -c deploy-master.yml jenkins-master`
 * set ALB about exposed port
 * install jenkins master plugins
 * create account for agents
